@@ -13,6 +13,9 @@ print "You entered the access token: ", accesstoken
 
 writer.writerows([['Android Package Name', 'Publisher Name', 'App Name', 'Primary Category', 'Store URL']])
 
+
+
+
 for row in reader:
 
         try:
@@ -20,8 +23,7 @@ for row in reader:
                 appjson = response.read()
                 appdata = json.loads(appjson)
 
-
-                if (appdata['app_availability'] != 0) :
+                if (appdata.get('app_availability') != 0) :
                         aid = row[0]
                         #print android package name
                         pubname = (appdata['developer'])
