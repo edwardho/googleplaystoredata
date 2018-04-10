@@ -2,6 +2,7 @@ import csv
 import urllib2
 import json
 import sys
+import time
 
 f = open('androidpackagenames.csv')
 fp = open('googleplayscraperoutput.csv', 'wb')
@@ -26,15 +27,24 @@ for row in reader:
                 if (appdata.get('app_availability') != 0) :
                         aid = row[0]
                         #print android package name
-                        pubname = (appdata['developer'])
+                        pubname = appdata.get('developer')
+                        if pubname is None:
+                                pubname = "NA"
                         #print pubname
-                        appname = (appdata['title'])
+                        appname = appdata.get('title')
+                        if appname is None:
+                                appname = "NA"
                         #print appname
-                        pgenre = (appdata['category'])
+                        pgenre = appdata.get('category')
+                        if pgenre is None:
+                                pgenre = "NA"
                         #print pgenre
-                        murl = (appdata['market_url'])
-                        separator = '&referrer'
-                        cleanmurl = murl.split(separator, 1)[0]
+                        murl = appdata.get('market_url')
+                        if murl is not None:
+                                separator = '&referrer'
+                                cleanmurl = murl.split(separator, 1)[0]
+                        else:
+                                cleanmurl = "NA"
                 else:
                         aid = row[0]
                         pubname = 'NULL'
@@ -50,5 +60,7 @@ for row in reader:
                 cleanmurl = 'NULL'
 
         writer.writerows([[aid, pubname.encode('utf-8'), appname.encode('utf-8'), pgenre, cleanmurl]])
+        time.sleep(0.05)
+        #to rate limit for 42matters 50 QPS limit
 
 print "Script run complete. Please check the output googleplayscraperoutput.csv"
