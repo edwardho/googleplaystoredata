@@ -12,7 +12,7 @@ writer = csv.writer(fp, delimiter=',')
 accesstoken = raw_input("Please enter your 42matters access_token: ")
 print "You entered the access token: ", accesstoken
 
-writer.writerows([['Android Package Name', 'Publisher Name', 'App Name', 'Primary Category', 'Store URL']])
+writer.writerows([['Android Package Name', 'Publisher Name', 'Website', 'App Name', 'Primary Category', 'Store URL']])
 
 
 
@@ -31,6 +31,10 @@ for row in reader:
                         if pubname is None:
                                 pubname = "NA"
                         #print pubname
+                        website = appdata.get('website')
+                        if website is None:
+                                website = "NA"
+                        #print website
                         appname = appdata.get('title')
                         if appname is None:
                                 appname = "NA"
@@ -48,6 +52,7 @@ for row in reader:
                 else:
                         aid = row[0]
                         pubname = 'NULL'
+                        website = 'NULL'
                         appname = 'NULL'
                         pgenre = 'NULL'
                         cleanmurl = 'NULL'
@@ -55,11 +60,12 @@ for row in reader:
         except urllib2.HTTPError as e:
                 aid = row[0]
                 pubname = 'NULL'
+                website = 'NULL'
                 appname = 'NULL'
                 pgenre = 'NULL'
                 cleanmurl = 'NULL'
 
-        writer.writerows([[aid, pubname.encode('utf-8'), appname.encode('utf-8'), pgenre, cleanmurl]])
+        writer.writerows([[aid, pubname.encode('utf-8'), website.encode('utf-8'), appname.encode('utf-8'), pgenre, cleanmurl]])
         time.sleep(0.05)
         #to rate limit for 42matters 50 QPS limit
 
